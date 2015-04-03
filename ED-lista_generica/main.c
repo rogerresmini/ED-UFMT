@@ -40,7 +40,7 @@ int main(void)
 			printf("Opcao invalida! \nEscolha outra.");
 			break;
 		}
-    }while(op < 5);
+	}while(op < 4);
 	printf("FIM!\n");
 	return 0;
 }
@@ -65,42 +65,59 @@ void inicializar(int *v, int val){
 }
 
 void inserir(int *v){
-    if(quant == tam)
-        printf("Lista cheia!");
-    else{
-        int val;
-        printf("Informe um valor acima de -1: ");
-        scanf("%d", &val);
-        if(quant == 0){
-            v[quant] = val;
-            quant++;
-        }else{
-            int i = 0;
-            while(i<tam){
-                printf("i: %d\n", i);
-                if(v[i] > val)
-                    break;
-                i++;
-            }
-            if(i==tam){ // inserir no fim
-                compactar(v);
-                v[quant] = val;
-                quant++;
-            }else
-                if(v[i] == -1){ // inserir no meio com buraco
-                    v[i] = val;
-                    quant++;
-                }else
-                    if(i == 0){ // inserir no início ou inserir no meio sem buraco
-                        compactar(v);
-                        int j;
-                        for(j=quant; j<i; j--)
-                            v[j] = v[j-1];
-                        v[j] = val;
-                        quant++;
-                    }
-        }
-    }
+	if(quant == tam) // ver se a lista está cheia
+		printf("Lista cheia!");
+	else{
+		int val;
+		printf("Informe um valor acima de -1: ");
+		scanf("%d", &val);
+		if(quant == 0){ // ver se a lista está vazia
+			v[quant] = val; // se estiver, insere direto na primeira posição
+			quant++;
+		}else{
+			int i = 0;
+			while(i<tam){ // navega até a posição onde deve ser inserido o valor informado pelo usuário
+				// printf("i: %d\n", i);
+				if(v[i] > val)
+					break;
+				i++;
+			} // nesse ponto, i armazena o índice da posição a ser inserido
+			printf("i: %i\n", i);
+			// esta posição pode ser:
+			// 1. no fim, fora do vetor
+			// 2. no meio em uma posição livre (-1)
+			// 3. no início do vetor
+			// 4. no meio em uma posição ocupada
+			if(i==tam){ // inserir no fim - i está fora do vetor
+				if(v[i-1] == -1){ // se a lista encerra antes da última posição do vetor
+					int fim = 0, cont;
+					for(cont=0; cont<tam; cont++){
+						if(v[cont] != -1)
+							fim = cont;
+					}
+					printf("fim: %i\n", fim);
+					v[fim+1] = val;
+					quant++;
+				}else{
+					compactar(v); // compactar a lista
+					v[quant] = val; // inserir o valor
+					quant++; // incrementar a contadora
+				}
+			}else
+				if(v[i-1] == -1){ // inserir no meio com buraco - i é o índice de uma posição livre
+					v[i-1] = val;
+					quant++;
+				}else{ // inserir no início ou inserir no meio sem buraco
+					//                    if(i == 0){
+					compactar(v);
+					int j;
+					for(j=quant; j>=i; j--)
+						v[j] = v[j-1];
+					v[j] = val;
+					quant++;
+				}
+		}
+	}
 }
 
 void compactar(int *v){
