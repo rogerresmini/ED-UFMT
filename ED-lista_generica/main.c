@@ -131,12 +131,13 @@ void compactar(int *v){
                 v[i+1] = -1;
             }
         }
+        printf("Lista compactada com sucesso!");
     }
 }
 
 void remover(int *v){
 	if(quant == 0)
-		printf("lista vazia!");
+        printf("Lista vazia!");
 	else{
 		int val;
 		printf("Informe o valor para remover: \n");
@@ -157,7 +158,7 @@ void remover(int *v){
 
 void mostrar(int *v){
 	if(quant == 0)
-		printf("lista vazia!");
+        printf("Lista vazia!");
 	else{
         int i;
         for(i=0; i<tam; i++){
